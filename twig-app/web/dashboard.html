@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TicketApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-blue': 'rgb(80,80,255)',
+                        'brand-cyan': 'rgb(0,212,255)',
+                        'dark-bg': '#0a0c1a',
+                        'dark-card': '#0f172a',
+                        'dark-secondary': '#050713',
+                        'dark-border': '#1a1f3d',
+                        'dark-input': '#1e253d'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gray-900 text-white flex flex-col">
+    <!-- Top navigation bar for testing routes -->
+    <nav class="bg-gray-800 px-6 py-4 flex flex-wrap gap-4 text-sm font-medium">
+        <a href="index.html" class="hover:text-indigo-400">Home</a>
+        <a href="login.html" class="hover:text-indigo-400">Login</a>
+        <a href="signup.html" class="hover:text-indigo-400">Signup</a>
+        <a href="dashboard.html" class="hover:text-indigo-400">Dashboard</a>
+        <a href="tickets.html" class="hover:text-indigo-400">Tickets</a>
+    </nav>
+
+    <!-- Routed content -->
+    <main class="flex-1 flex items-center justify-center p-8 text-center">
+        <!-- Dashboard Content - Exact React Match -->
+        <div class="max-w-md text-left bg-[#0f172a] border border-[rgba(80,80,255,0.4)] rounded-xl shadow-[0_30px_80px_rgba(80,80,255,0.2)] p-6 w-full">
+            <!-- Header row with user + logout -->
+            <div class="flex items-start justify-between">
+                <div>
+                    <h1 class="text-xl font-semibold text-white">
+                        Dashboard
+                    </h1>
+                    <p class="text-xs text-gray-400 mt-1">
+                        Signed in as
+                        <span class="text-[rgb(80,80,255)]" id="user-email">
+                            demo@example.com
+                        </span>
+                    </p>
+                </div>
+
+                <button
+                    onclick="handleLogout()"
+                    class="text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg px-3 py-2"
+                >
+                    Logout
+                </button>
+            </div>
+
+            <!-- LIVE STATS -->
+            <div class="mt-6 grid grid-cols-3 gap-3 text-center text-xs">
+                <!-- Total tickets -->
+                <div class="bg-[#1e253d] rounded-lg p-3 border border-gray-600">
+                    <div class="text-white font-semibold text-lg" id="total-count">
+                        0
+                    </div>
+                    <div class="text-gray-400">Total</div>
+                </div>
+
+                <!-- Open tickets -->
+                <div class="bg-[#1e253d] rounded-lg p-3 border border-gray-600">
+                    <div class="text-green-400 font-semibold text-lg" id="open-count">
+                        0
+                    </div>
+                    <div class="text-gray-400">Open</div>
+                </div>
+
+                <!-- Closed tickets -->
+                <div class="bg-[#1e253d] rounded-lg p-3 border border-gray-600">
+                    <div class="text-gray-300 font-semibold text-lg" id="closed-count">
+                        0
+                    </div>
+                    <div class="text-gray-400">Closed</div>
+                </div>
+            </div>
+
+            <!-- LITTLE HINT / NAV -->
+            <div class="mt-8 text-[11px] text-gray-500 leading-relaxed">
+                <p>
+                    These stats are calculated from your actual tickets saved in
+                    localStorage. Create or close tickets on the
+                    <button
+                        onclick="goToTickets()"
+                        class="text-[rgb(80,80,255)] hover:text-[rgb(100,100,255)] underline underline-offset-2"
+                    >
+                        Tickets page
+                    </button>
+                    .
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Temporary footer -->
+    <footer class="bg-gray-800 text-gray-400 text-xs text-center py-4">
+        TicketApp • HNG Stage 2
+    </footer>
+
+    <script>
+        // Load and display ticket stats
+        function loadStats() {
+            // Get tickets from localStorage (simulating React's localStorage approach)
+            const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+            
+            const total = tickets.length;
+            const open = tickets.filter(t => t.status === 'open').length;
+            const closed = tickets.filter(t => t.status === 'closed').length;
+            
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('open-count').textContent = open;
+            document.getElementById('closed-count').textContent = closed;
+        }
+
+        // Handle logout
+        function handleLogout() {
+            // Clear session data
+            localStorage.removeItem('ticketapp_session');
+            localStorage.removeItem('tickets');
+            
+            // Redirect to home
+            window.location.href = 'index.html';
+        }
+
+        // Navigate to tickets page
+        function goToTickets() {
+            window.location.href = 'tickets.html';
+        }
+
+        // Load stats when page loads
+        window.addEventListener('load', loadStats);
+
+        // Check if user is logged in (basic protection)
+        const session = localStorage.getItem('ticketapp_session');
+        if (!session) {
+            window.location.href = 'login.html?message=Please log in to access the dashboard';
+        } else {
+            try {
+                const sessionData = JSON.parse(session);
+                document.getElementById('user-email').textContent = sessionData.email || 'demo@example.com';
+            } catch (e) {
+                // If session data is invalid, logout
+                handleLogout();
+            }
+        }
+    </script>
+</body>
+</html>

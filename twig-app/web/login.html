@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TicketApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-blue': 'rgb(80,80,255)',
+                        'brand-cyan': 'rgb(0,212,255)',
+                        'dark-bg': '#0a0c1a',
+                        'dark-card': '#0f172a',
+                        'dark-secondary': '#050713',
+                        'dark-border': '#1a1f3d',
+                        'dark-input': '#1e253d'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gray-900 text-white flex flex-col">
+    <!-- Top navigation bar for testing routes -->
+    <nav class="bg-gray-800 px-6 py-4 flex flex-wrap gap-4 text-sm font-medium">
+        <a href="index.html" class="hover:text-indigo-400">Home</a>
+        <a href="login.html" class="hover:text-indigo-400">Login</a>
+        <a href="signup.html" class="hover:text-indigo-400">Signup</a>
+        <a href="dashboard.html" class="hover:text-indigo-400">Dashboard</a>
+        <a href="tickets.html" class="hover:text-indigo-400">Tickets</a>
+    </nav>
+
+    <!-- Routed content -->
+    <main class="flex-1 flex items-center justify-center p-8 text-center">
+        <!-- Login Form Content - Exact React Match -->
+        <div class="w-full max-w-sm bg-[#0f172a] border border-[rgba(80,80,255,0.4)] shadow-[0_30px_80px_rgba(80,80,255,0.2)] rounded-xl p-6 text-left">
+            <h1 class="text-xl font-semibold text-white">Welcome back</h1>
+            <p class="text-sm text-gray-400 mt-1">
+                Log in to manage your tickets.
+            </p>
+
+            <!-- Session Expired Message (if needed) -->
+            <div id="session-expired-msg" class="mt-4 text-sm text-yellow-300 bg-yellow-900/20 border border-yellow-500/40 rounded-lg px-3 py-2 hidden">
+                Your session has expired. Please log in again.
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-msg" class="mt-4 text-sm text-red-400 bg-red-900/20 border border-red-500/40 rounded-lg px-3 py-2 hidden">
+            </div>
+
+            <form id="login-form" class="mt-6 flex flex-col gap-4">
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs text-gray-300" for="email">
+                        Email
+                    </label>
+                    <input
+                        id="email"
+                        type="email"
+                        class="bg-[#1e253d] border border-gray-600 text-white text-sm rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[rgb(80,80,255)]"
+                        placeholder="you@example.com"
+                    />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs text-gray-300" for="password">
+                        Password
+                    </label>
+                    <input
+                        id="password"
+                        type="password"
+                        class="bg-[#1e253d] border border-gray-600 text-white text-sm rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[rgb(80,80,255)]"
+                        placeholder="••••••••"
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full text-center font-medium bg-[rgb(80,80,255)] hover:bg-[rgb(100,100,255)] text-white rounded-lg px-4 py-2 text-sm shadow-[0_20px_60px_rgba(80,80,255,0.4)]"
+                >
+                    Log in
+                </button>
+            </form>
+
+            <p class="text-xs text-gray-500 mt-6 text-center">
+                No account?
+                <a
+                    href="signup.html"
+                    class="text-[rgb(80,80,255)] hover:text-[rgb(100,100,255)]"
+                >
+                    Create one
+                </a>
+            </p>
+        </div>
+    </main>
+
+    <!-- Temporary footer -->
+    <footer class="bg-gray-800 text-gray-400 text-xs text-center py-4">
+        TicketApp • HNG Stage 2
+    </footer>
+
+    <script>
+        // Get URL parameters for session expired message
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionExpiredMsg = urlParams.get('message');
+        
+        if (sessionExpiredMsg) {
+            const msgDiv = document.getElementById('session-expired-msg');
+            msgDiv.textContent = sessionExpiredMsg;
+            msgDiv.classList.remove('hidden');
+        }
+
+        // Login form handling
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-msg');
+            
+            // Clear previous errors
+            errorDiv.classList.add('hidden');
+            
+            // Validation
+            if (!email.trim() || !password.trim()) {
+                errorDiv.textContent = 'All fields are required.';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            
+            // Simple demo validation - in real app this would call backend
+            let isValidUser = false;
+            
+            // Check demo credentials
+            if (email === 'demo@example.com' && password === 'password') {
+                isValidUser = true;
+            }
+            
+            // Check if user signed up through our signup form
+            const demoUser = localStorage.getItem('demo_user');
+            if (demoUser) {
+                try {
+                    const userData = JSON.parse(demoUser);
+                    if (userData.email === email && userData.password === password) {
+                        isValidUser = true;
+                    }
+                } catch (e) {
+                    // Invalid stored user data
+                }
+            }
+            
+            if (isValidUser) {
+                // Create session in localStorage
+                const sessionData = {
+                    email: email,
+                    loggedIn: true,
+                    loginTime: new Date().toISOString()
+                };
+                localStorage.setItem('ticketapp_session', JSON.stringify(sessionData));
+                
+                // Success - redirect to dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                errorDiv.textContent = 'Invalid email or password.';
+                errorDiv.classList.remove('hidden');
+            }
+        });
+
+        // Clear error on input change
+        document.getElementById('email').addEventListener('input', function() {
+            document.getElementById('error-msg').classList.add('hidden');
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            document.getElementById('error-msg').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
