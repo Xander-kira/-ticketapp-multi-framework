@@ -1,0 +1,29 @@
+# Ignore vendor directory
+vendor/
+
+# Ignore Composer lock file
+composer.lock
+
+# Ignore data files
+data/
+*.json
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore cache files
+cache/
+*.cache

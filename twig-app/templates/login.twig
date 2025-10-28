@@ -1,0 +1,183 @@
+{% extends "base.twig" %}
+
+{% block title %}Login - TicketApp{% endblock %}
+
+{% set current_route = '/auth/login' %}
+
+{% block content %}
+<div class="min-h-screen bg-brand-dark flex items-center justify-center px-6 text-white">
+    <div class="max-w-md w-full bg-card-dark border border-brand-blue rounded-xl shadow-brand-blue p-6">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-semibold text-white">Welcome back</h1>
+            <p class="text-sm text-gray-400 mt-2">Sign in to your account</p>
+        </div>
+
+        {% if message %}
+        <div class="mb-4 text-sm text-amber-400 bg-amber-900/20 border border-amber-500/40 rounded-lg px-3 py-2">
+            {{ message }}
+        </div>
+        {% endif %}
+
+        <div id="error-message" class="hidden mb-4 text-sm text-red-400 bg-red-900/20 border border-red-500/40 rounded-lg px-3 py-2"></div>
+
+        <form id="login-form" action="/auth/login" method="POST" class="space-y-4">
+            <div>
+                <label for="email" class="block text-xs text-gray-300 mb-2">
+                    Email address <span class="text-red-400">*</span>
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required
+                    class="w-full bg-input-dark border border-gray-600 text-white text-sm rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-brand-blue"
+                    placeholder="your.email@example.com"
+                />
+                <div id="email-error" class="text-xs text-red-400 mt-1 hidden"></div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-xs text-gray-300 mb-2">
+                    Password <span class="text-red-400">*</span>
+                </label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required
+                    class="w-full bg-input-dark border border-gray-600 text-white text-sm rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-brand-blue"
+                    placeholder="Enter your password"
+                />
+                <div id="password-error" class="text-xs text-red-400 mt-1 hidden"></div>
+            </div>
+
+            <button 
+                type="submit" 
+                id="login-btn"
+                class="w-full bg-brand-blue bg-brand-blue-hover text-white font-medium rounded-lg px-4 py-2 shadow-brand-blue disabled:opacity-50"
+            >
+                <span class="login-text">Sign In</span>
+                <span class="login-loading hidden">Signing in...</span>
+            </button>
+        </form>
+
+        <div class="mt-6 text-center">
+            <p class="text-xs text-gray-400">
+                Don't have an account? 
+                <a href="/auth/signup" class="text-brand-blue hover:text-[rgb(100,100,255)] underline underline-offset-2">
+                    Sign up here
+                </a>
+            </p>
+        </div>
+
+        <div class="mt-4 text-center">
+            <a href="/" class="text-xs text-gray-500 hover:text-gray-400 underline underline-offset-2">
+                ← Back to home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('login-form');
+    const errorDiv = document.getElementById('error-message');
+    const loginBtn = document.getElementById('login-btn');
+    const loginText = document.querySelector('.login-text');
+    const loginLoading = document.querySelector('.login-loading');
+
+    // Form validation
+    function validateForm() {
+        let isValid = true;
+        
+        // Clear previous errors
+        document.getElementById('email-error').classList.add('hidden');
+        document.getElementById('password-error').classList.add('hidden');
+        errorDiv.classList.add('hidden');
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        // Email validation
+        if (!email) {
+            showFieldError('email', 'Email is required.');
+            isValid = false;
+        } else if (!isValidEmail(email)) {
+            showFieldError('email', 'Please enter a valid email address.');
+            isValid = false;
+        }
+
+        // Password validation
+        if (!password) {
+            showFieldError('password', 'Password is required.');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showFieldError(field, message) {
+        const errorElement = document.getElementById(field + '-error');
+        errorElement.textContent = message;
+        errorElement.classList.remove('hidden');
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function showError(message) {
+        errorDiv.textContent = message;
+        errorDiv.classList.remove('hidden');
+    }
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!validateForm()) {
+            return;
+        }
+
+        // Show loading state
+        loginBtn.disabled = true;
+        loginText.classList.add('hidden');
+        loginLoading.classList.remove('hidden');
+
+        // Submit form
+        submitForm(form, function(data) {
+            if (data.success) {
+                createSession(document.getElementById('email').value);
+                showToast('Login successful!', 'success');
+                // Redirect will be handled by submitForm
+            }
+        });
+
+        // Reset loading state after a moment (in case of error)
+        setTimeout(() => {
+            loginBtn.disabled = false;
+            loginText.classList.remove('hidden');
+            loginLoading.classList.add('hidden');
+        }, 2000);
+    });
+
+    // Real-time validation
+    document.getElementById('email').addEventListener('blur', function() {
+        const email = this.value.trim();
+        if (email && !isValidEmail(email)) {
+            showFieldError('email', 'Please enter a valid email address.');
+        } else {
+            document.getElementById('email-error').classList.add('hidden');
+        }
+    });
+
+    document.getElementById('password').addEventListener('input', function() {
+        if (this.value.trim()) {
+            document.getElementById('password-error').classList.add('hidden');
+        }
+    });
+});
+</script>
+{% endblock %}

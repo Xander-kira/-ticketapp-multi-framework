@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TicketApp{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    maxWidth: {
+                        '1440': '1440px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for consistent design */
+        .bg-brand-dark { background-color: #0a0c1a; }
+        .bg-card-dark { background-color: #0f172a; }
+        .bg-input-dark { background-color: #1e253d; }
+        .text-brand-blue { color: rgb(80, 80, 255); }
+        .bg-brand-blue { background-color: rgb(80, 80, 255); }
+        .bg-brand-blue-hover:hover { background-color: rgb(100, 100, 255); }
+        .border-brand-blue { border-color: rgba(80, 80, 255, 0.4); }
+        .shadow-brand-blue { box-shadow: 0 20px 60px rgba(80, 80, 255, 0.4); }
+        .shadow-cyan { box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2); }
+    </style>
+</head>
+<body class="min-h-screen bg-brand-dark text-white">
+    {% if show_nav|default(true) %}
+    <!-- Navigation -->
+    <header class="bg-card-dark border-b border-slate-800">
+        <nav class="max-w-1440 mx-auto flex flex-wrap items-center gap-6 text-sm font-medium text-slate-200 px-4 py-4 md:px-8">
+            <a href="/" class="hover:text-indigo-400 {% if current_route == '/' %}text-indigo-400{% endif %}">Home</a>
+            <a href="/auth/login" class="hover:text-indigo-400 {% if current_route == '/auth/login' %}text-indigo-400{% endif %}">Login</a>
+            <a href="/auth/signup" class="hover:text-indigo-400 {% if current_route == '/auth/signup' %}text-indigo-400{% endif %}">Signup</a>
+            <a href="/app/dashboard" class="hover:text-indigo-400 {% if current_route == '/app/dashboard' %}text-indigo-400{% endif %}">Dashboard</a>
+            <a href="/app/tickets" class="hover:text-indigo-400 {% if current_route == '/app/tickets' %}text-indigo-400{% endif %}">Tickets</a>
+        </nav>
+    </header>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main {% if full_height|default(false) %}class="flex-1"{% endif %}>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if show_footer|default(true) %}
+    <!-- Footer -->
+    <footer class="bg-card-dark border-t border-slate-800 text-slate-400 text-xs text-center py-4">
+        TicketApp • HNG Stage 2 • Twig Version
+    </footer>
+    {% endif %}
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <script>
+        // Toast notification system
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-green-600' : 'bg-blue-600';
+            
+            toast.className = `${bgColor} text-white px-4 py-2 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300`;
+            toast.textContent = message;
+            
+            document.getElementById('toast-container').appendChild(toast);
+            
+            // Slide in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Slide out and remove
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Session management (similar to localStorage approach)
+        function createSession(email) {
+            // Session is handled server-side, but we can store some client data
+            localStorage.setItem('ticketapp_user_email', email);
+        }
+
+        function clearSession() {
+            localStorage.removeItem('ticketapp_user_email');
+        }
+
+        // Handle form submissions with AJAX
+        function submitForm(form, successCallback) {
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else if (successCallback) {
+                        successCallback(data);
+                    }
+                } else {
+                    showToast(data.message || 'An error occurred.', 'error');
+                }
+            })
+            .catch(error => {
+                showToast('Network error. Please try again.', 'error');
+            });
+        }
+
+        // Ticket management functions
+        function createTicket(data) {
+            return fetch('/api/tickets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json());
+        }
+
+        function updateTicket(data) {
+            return fetch('/api/tickets', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json());
+        }
+
+        function deleteTicket(id) {
+            return fetch('/api/tickets', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id })
+            }).then(response => response.json());
+        }
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
