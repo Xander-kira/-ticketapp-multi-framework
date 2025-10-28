@@ -244,9 +244,9 @@ This project is built for educational purposes as part of the HNG Stage 2 task. 
 
 ## 🔗 Links
 
-- **React Demo**: [Live React App](https://your-react-app.vercel.app)
-- **Vue Demo**: [Live Vue App](https://your-vue-app.vercel.app)
-- **Twig Demo**: [Live Twig App](https://your-twig-app.github.io)
+- **React Demo**: [Live React App](https://hng-ticketapp-react.vercel.app)
+- **Vue Demo**: [Live Vue App](https://ticketapp-multi-framework-awyo.vercel.app)
+- **Twig Demo**: [Live Twig App](https://ticketapp-multi-framework-fybu.vercel.app)
 
 ---
 
