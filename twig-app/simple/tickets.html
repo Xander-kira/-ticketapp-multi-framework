@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tickets - TicketApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-900 text-white">
+    <!-- Navigation -->
+    <nav class="bg-gray-800 px-6 py-4 flex flex-wrap gap-4 text-sm font-medium">
+        <a href="index.html" class="hover:text-indigo-400">Home</a>
+        <a href="login.html" class="hover:text-indigo-400">Login</a>
+        <a href="signup.html" class="hover:text-indigo-400">Signup</a>
+        <a href="dashboard.html" class="hover:text-indigo-400">Dashboard</a>
+        <a href="tickets.html" class="hover:text-indigo-400 text-blue-400">Tickets</a>
+    </nav>
+
+    <!-- Tickets Content -->
+    <main class="p-8">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-3xl font-bold mb-8">Support Tickets</h1>
+            
+            <!-- Create Ticket Form -->
+            <div class="bg-gray-800 p-6 rounded-lg mb-8">
+                <h2 class="text-xl font-bold mb-4">Create New Ticket</h2>
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Title</label>
+                        <input type="text" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Ticket title" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Description</label>
+                        <textarea class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" placeholder="Describe the issue"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Status</label>
+                        <select class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                            <option value="open">Open</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="closed">Closed</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+                        Create Ticket
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Tickets List -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Sample Ticket 1 -->
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold">Cannot login to system</h3>
+                        <span class="bg-green-600 text-xs px-2 py-1 rounded">Open</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">User reports login issues with correct credentials</p>
+                    <div class="flex gap-2">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">Edit</button>
+                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs">Delete</button>
+                    </div>
+                </div>
+                
+                <!-- Sample Ticket 2 -->
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold">App crashes on mobile</h3>
+                        <span class="bg-yellow-600 text-xs px-2 py-1 rounded">In Progress</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Mobile app crashes when opening ticket list</p>
+                    <div class="flex gap-2">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">Edit</button>
+                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs">Delete</button>
+                    </div>
+                </div>
+                
+                <!-- Sample Ticket 3 -->
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold">Feature request: Dark mode</h3>
+                        <span class="bg-gray-600 text-xs px-2 py-1 rounded">Closed</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Request for dark mode theme implementation</p>
+                    <div class="flex gap-2">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">Edit</button>
+                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
