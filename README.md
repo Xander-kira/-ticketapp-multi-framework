@@ -2,6 +2,18 @@
 
 A comprehensive support ticket management system implemented across three different frameworks, demonstrating identical functionality and design patterns. Built for HNG Stage 2 task.
 
+## 🌐 Live Demos
+
+**🚀 Try all three implementations live:**
+
+| Framework | Live Demo | Source Code |
+|-----------|-----------|-------------|
+| **React** | [🔗 View Demo](https://hng-ticketapp-react.vercel.app) | [📁 Source](./react-app) |
+| **Vue.js** | [🔗 View Demo](https://ticketapp-multi-framework.vercel.app) | [📁 Source](./vue-app) |
+| **Twig/HTML** | [🔗 View Demo](https://ticketapp-multi-framework-awyo.vercel.app) | [📁 Source](./twig-app) |
+
+> **Demo Credentials:** Use any email and password to sign in and test the full functionality
+
 ## 🚀 Project Overview
 
 This project showcases the same ticket management application built with three different technologies:
