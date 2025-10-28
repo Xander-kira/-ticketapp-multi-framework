@@ -5,58 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TicketApp - Support Desk</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-blue': 'rgb(80,80,255)',
+                        'dark-bg': '#0a0c1a',
+                        'dark-card': '#0b0f2e'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="min-h-screen bg-gray-900 text-white">
+<body class="min-h-screen bg-[#0a0c1a] text-white overflow-hidden">
     <!-- Navigation -->
-    <nav class="bg-gray-800 px-6 py-4 flex flex-wrap gap-4 text-sm font-medium">
-        <a href="index.html" class="hover:text-indigo-400">Home</a>
-        <a href="login.html" class="hover:text-indigo-400">Login</a>
-        <a href="signup.html" class="hover:text-indigo-400">Signup</a>
-        <a href="dashboard.html" class="hover:text-indigo-400">Dashboard</a>
-        <a href="tickets.html" class="hover:text-indigo-400">Tickets</a>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="flex-1 flex items-center justify-center p-8">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-6xl font-bold mb-6">
-                <span class="text-white">Ticket</span><span class="text-blue-500">App</span>
-            </h1>
-            <p class="text-xl text-gray-300 mb-8">
-                Modern support ticket management system with CRUD operations
-            </p>
-            <div class="flex gap-4 justify-center">
-                <a href="login.html" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium">
-                    Get Started
-                </a>
-                <a href="signup.html" class="border border-gray-600 hover:border-gray-500 text-white px-8 py-3 rounded-lg font-medium">
-                    Sign Up
-                </a>
-            </div>
-            
-            <div class="mt-12 p-6 bg-gray-800 rounded-lg">
-                <h2 class="text-2xl font-bold mb-4">Features</h2>
-                <div class="grid md:grid-cols-3 gap-6 text-left">
-                    <div class="p-4 bg-gray-700 rounded">
-                        <h3 class="font-bold text-blue-400">Authentication</h3>
-                        <p>Secure login and signup system</p>
-                    </div>
-                    <div class="p-4 bg-gray-700 rounded">
-                        <h3 class="font-bold text-blue-400">CRUD Operations</h3>
-                        <p>Create, read, update, delete tickets</p>
-                    </div>
-                    <div class="p-4 bg-gray-700 rounded">
-                        <h3 class="font-bold text-blue-400">Responsive Design</h3>
-                        <p>Works on all devices</p>
-                    </div>
+    <nav class="relative z-50 bg-[#0a0c1a]/80 backdrop-blur-sm border-b border-white/10">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-xl font-bold">
+                    <span class="text-white">Ticket</span><span class="text-[rgb(80,80,255)]">App</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white hover:text-[rgb(80,80,255)] transition-colors">Home</a>
+                    <a href="login.html" class="text-white/70 hover:text-[rgb(80,80,255)] transition-colors">Login</a>
+                    <a href="tickets.html" class="text-white/70 hover:text-[rgb(80,80,255)] transition-colors">Demo</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="login.html" class="text-white/70 hover:text-white transition-colors">Sign in</a>
+                    <a href="signup.html" class="bg-[rgb(80,80,255)] hover:bg-[rgb(70,70,235)] text-white px-4 py-2 rounded-lg transition-colors">Sign up</a>
                 </div>
             </div>
         </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="relative bg-[#0a0c1a] text-white overflow-hidden">
+        <!-- Hero Section -->
+        <section class="relative pt-20 pb-28 md:pt-28 md:pb-40">
+            <!-- Intense Glow / Brand Orb -->
+            <div class="absolute -top-24 -left-24 w-[480px] h-[480px] rounded-full blur-[120px] opacity-70 pointer-events-none"
+                 style="background: radial-gradient(circle at 30% 30%, rgba(80,80,255,0.9) 0%, rgba(0,0,0,0) 70%);">
+            </div>
+            <div class="absolute top-10 right-[-100px] w-[360px] h-[360px] rounded-full blur-[110px] opacity-60 pointer-events-none"
+                 style="background: radial-gradient(circle at 50% 50%, rgba(0,212,255,0.7) 0%, rgba(0,0,0,0) 70%);">
+            </div>
+
+            <!-- Custom Layered Waves at Bottom -->
+            <div class="absolute inset-x-0 bottom-0 h-48 md:h-56 overflow-hidden pointer-events-none">
+                <!-- Back wave (darker) -->
+                <svg class="absolute inset-x-0 bottom-0 w-full h-full text-[#0b0f2e]" preserveAspectRatio="none" viewBox="0 0 1440 320" fill="currentColor">
+                    <path d="M0,192L30,202.7C60,213,120,235,180,240C240,245,300,235,360,192C420,149,480,75,540,53.3C600,32,660,64,720,96C780,128,840,160,900,170.7C960,181,1020,171,1080,176C1140,181,1200,203,1260,213.3C1320,224,1380,224,1410,224L1440,224L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"/>
+                </svg>
+                <!-- Front wave (accent color) -->
+                <svg class="absolute inset-x-0 bottom-0 w-full h-full opacity-40" preserveAspectRatio="none" viewBox="0 0 1440 320" fill="rgb(58,69,255)">
+                    <path d="M0,288L30,272C60,256,120,224,180,218.7C240,213,300,235,360,218.7C420,203,480,149,540,149.3C600,149,660,203,720,229.3C780,256,840,256,900,250.7C960,245,1020,235,1080,202.7C1140,171,1200,117,1260,112C1320,107,1380,149,1410,170.7L1440,192L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"/>
+                </svg>
+            </div>
+
+            <!-- Content Container -->
+            <div class="relative max-w-[1440px] mx-auto px-6 md:px-8">
+                <div class="max-w-2xl">
+                    <!-- Headline -->
+                    <h1 class="text-3xl md:text-5xl font-bold leading-tight text-white">
+                        Streamlined Support Ticket Management
+                        <span class="block text-[rgb(80,80,255)]">Built for Modern Teams</span>
+                    </h1>
+                    
+                    <!-- Subheadline -->
+                    <p class="mt-6 text-lg md:text-xl text-white/70 leading-relaxed">
+                        Organize, track, and resolve customer issues efficiently with our intuitive ticket management system. 
+                        Create, update, and close tickets with ease.
+                    </p>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                        <a href="login.html" class="inline-flex items-center justify-center px-8 py-4 bg-[rgb(80,80,255)] hover:bg-[rgb(70,70,235)] text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105">
+                            Get Started Free
+                        </a>
+                        <a href="tickets.html" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 hover:border-[rgb(80,80,255)] text-white font-semibold rounded-xl transition-all duration-200 hover:bg-[rgb(80,80,255)]/10">
+                            View Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="relative py-20 bg-[#0b0f2e]">
+            <div class="max-w-[1440px] mx-auto px-6 md:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                        Everything you need to manage support tickets
+                    </h2>
+                    <p class="text-lg text-white/70 max-w-2xl mx-auto">
+                        Built with modern web technologies and designed for performance, scalability, and ease of use.
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[rgb(80,80,255)]/50 transition-all duration-300">
+                        <div class="w-12 h-12 bg-[rgb(80,80,255)] rounded-xl flex items-center justify-center mb-6">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Secure Authentication</h3>
+                        <p class="text-white/70">
+                            Secure login and signup system with session management to protect your data.
+                        </p>
+                    </div>
+                    
+                    <div class="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[rgb(80,80,255)]/50 transition-all duration-300">
+                        <div class="w-12 h-12 bg-[rgb(80,80,255)] rounded-xl flex items-center justify-center mb-6">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Full CRUD Operations</h3>
+                        <p class="text-white/70">
+                            Create, read, update, and delete tickets with a clean, intuitive interface.
+                        </p>
+                    </div>
+                    
+                    <div class="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[rgb(80,80,255)]/50 transition-all duration-300">
+                        <div class="w-12 h-12 bg-[rgb(80,80,255)] rounded-xl flex items-center justify-center mb-6">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Responsive Design</h3>
+                        <p class="text-white/70">
+                            Works perfectly on desktop, tablet, and mobile devices with modern design.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
-    <footer class="text-center py-8 text-gray-500">
-        <p>TicketApp - Multi-Framework Implementation (Twig/HTML Version)</p>
+    <footer class="bg-[#0a0c1a] border-t border-white/10 py-8">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-8 text-center">
+            <p class="text-white/50">TicketApp - Multi-Framework Implementation (Twig/HTML Version)</p>
+        </div>
     </footer>
 </body>
 </html>

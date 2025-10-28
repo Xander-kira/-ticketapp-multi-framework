@@ -5,93 +5,344 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tickets - TicketApp</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-blue': 'rgb(80,80,255)',
+                        'dark-bg': '#0a0c1a',
+                        'dark-card': '#0b0f2e'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="min-h-screen bg-gray-900 text-white">
+<body class="min-h-screen bg-[#0a0c1a] text-white">
     <!-- Navigation -->
-    <nav class="bg-gray-800 px-6 py-4 flex flex-wrap gap-4 text-sm font-medium">
-        <a href="index.html" class="hover:text-indigo-400">Home</a>
-        <a href="login.html" class="hover:text-indigo-400">Login</a>
-        <a href="signup.html" class="hover:text-indigo-400">Signup</a>
-        <a href="dashboard.html" class="hover:text-indigo-400">Dashboard</a>
-        <a href="tickets.html" class="hover:text-indigo-400 text-blue-400">Tickets</a>
+    <nav class="relative z-50 bg-[#0a0c1a]/80 backdrop-blur-sm border-b border-white/10">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-xl font-bold">
+                    <a href="index.html">
+                        <span class="text-white">Ticket</span><span class="text-[rgb(80,80,255)]">App</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="dashboard.html" class="text-white/70 hover:text-[rgb(80,80,255)] transition-colors">Dashboard</a>
+                    <a href="tickets.html" class="text-[rgb(80,80,255)] font-medium">Tickets</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="userEmail" class="text-white/70"></span>
+                    <button onclick="logout()" class="text-white/70 hover:text-red-400 transition-colors">Sign out</button>
+                </div>
+            </div>
+        </div>
     </nav>
 
-    <!-- Tickets Content -->
-    <main class="p-8">
-        <div class="max-w-6xl mx-auto">
-            <h1 class="text-3xl font-bold mb-8">Support Tickets</h1>
-            
-            <!-- Create Ticket Form -->
-            <div class="bg-gray-800 p-6 rounded-lg mb-8">
-                <h2 class="text-xl font-bold mb-4">Create New Ticket</h2>
-                <form class="space-y-4">
+    <!-- Main Content -->
+    <main class="max-w-[1440px] mx-auto px-6 md:px-8 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white mb-2">Support Tickets</h1>
+                <p class="text-white/70">Manage and track your support tickets</p>
+            </div>
+            <button onclick="showCreateForm()" class="bg-[rgb(80,80,255)] hover:bg-[rgb(70,70,235)] text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                New Ticket
+            </button>
+        </div>
+
+        <!-- Create/Edit Ticket Modal -->
+        <div id="ticketModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-[#0b0f2e] rounded-2xl border border-white/10 p-6 w-full max-w-md">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 id="modalTitle" class="text-xl font-bold text-white">Create New Ticket</h2>
+                    <button onclick="hideTicketModal()" class="text-white/50 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <form id="ticketForm" class="space-y-4">
+                    <input type="hidden" id="ticketId" name="ticketId">
+                    
                     <div>
-                        <label class="block text-sm font-medium mb-2">Title</label>
-                        <input type="text" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Ticket title" required>
+                        <label for="title" class="block text-sm font-medium text-white/90 mb-2">Title</label>
+                        <input 
+                            type="text" 
+                            id="title" 
+                            name="title" 
+                            required
+                            class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[rgb(80,80,255)] focus:border-transparent"
+                            placeholder="Enter ticket title"
+                        >
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium mb-2">Description</label>
-                        <textarea class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white" rows="3" placeholder="Describe the issue"></textarea>
+                        <label for="description" class="block text-sm font-medium text-white/90 mb-2">Description</label>
+                        <textarea 
+                            id="description" 
+                            name="description" 
+                            rows="3"
+                            class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[rgb(80,80,255)] focus:border-transparent resize-none"
+                            placeholder="Describe the issue or request"
+                        ></textarea>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium mb-2">Status</label>
-                        <select class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                        <label for="status" class="block text-sm font-medium text-white/90 mb-2">Status</label>
+                        <select 
+                            id="status" 
+                            name="status"
+                            class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[rgb(80,80,255)] focus:border-transparent"
+                        >
                             <option value="open">Open</option>
                             <option value="in_progress">In Progress</option>
                             <option value="closed">Closed</option>
                         </select>
                     </div>
+
+                    <div id="errorMessage" class="hidden p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm"></div>
                     
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
-                        Create Ticket
-                    </button>
+                    <div class="flex gap-3 pt-4">
+                        <button 
+                            type="submit" 
+                            class="flex-1 bg-[rgb(80,80,255)] hover:bg-[rgb(70,70,235)] text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+                        >
+                            <span id="submitButtonText">Create Ticket</span>
+                        </button>
+                        <button 
+                            type="button" 
+                            onclick="hideTicketModal()"
+                            class="px-6 py-3 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/5 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </form>
             </div>
-            
-            <!-- Tickets List -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Sample Ticket 1 -->
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="font-bold">Cannot login to system</h3>
-                        <span class="bg-green-600 text-xs px-2 py-1 rounded">Open</span>
-                    </div>
-                    <p class="text-gray-400 text-sm mb-4">User reports login issues with correct credentials</p>
-                    <div class="flex gap-2">
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">Edit</button>
-                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs">Delete</button>
-                    </div>
-                </div>
-                
-                <!-- Sample Ticket 2 -->
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="font-bold">App crashes on mobile</h3>
-                        <span class="bg-yellow-600 text-xs px-2 py-1 rounded">In Progress</span>
-                    </div>
-                    <p class="text-gray-400 text-sm mb-4">Mobile app crashes when opening ticket list</p>
-                    <div class="flex gap-2">
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">Edit</button>
-                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs">Delete</button>
-                    </div>
-                </div>
-                
-                <!-- Sample Ticket 3 -->
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="font-bold">Feature request: Dark mode</h3>
-                        <span class="bg-gray-600 text-xs px-2 py-1 rounded">Closed</span>
-                    </div>
-                    <p class="text-gray-400 text-sm mb-4">Request for dark mode theme implementation</p>
-                    <div class="flex gap-2">
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">Edit</button>
-                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs">Delete</button>
-                    </div>
-                </div>
-            </div>
+        </div>
+
+        <!-- Tickets List -->
+        <div id="ticketsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Tickets will be loaded here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center py-16 hidden">
+            <svg class="w-16 h-16 text-white/30 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <h3 class="text-xl font-semibold text-white/70 mb-2">No tickets yet</h3>
+            <p class="text-white/50 mb-6">Create your first support ticket to get started</p>
+            <button onclick="showCreateForm()" class="bg-[rgb(80,80,255)] hover:bg-[rgb(70,70,235)] text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                Create First Ticket
+            </button>
         </div>
     </main>
+
+    <script>
+        let editingTicketId = null;
+
+        // Check authentication
+        const session = localStorage.getItem('ticketapp_session');
+        if (!session) {
+            window.location.href = 'login.html';
+        } else {
+            const userData = JSON.parse(session);
+            document.getElementById('userEmail').textContent = userData.email;
+        }
+
+        // Load tickets on page load
+        loadTickets();
+
+        function loadTickets() {
+            const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+            const ticketsList = document.getElementById('ticketsList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (tickets.length === 0) {
+                ticketsList.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            ticketsList.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            ticketsList.innerHTML = tickets.map(ticket => `
+                <div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 hover:border-[rgb(80,80,255)]/50 transition-all">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="font-semibold text-white text-lg leading-tight">${ticket.title}</h3>
+                        <span class="px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(ticket.status)}">
+                            ${formatStatus(ticket.status)}
+                        </span>
+                    </div>
+                    
+                    <p class="text-white/70 text-sm mb-4 line-clamp-3">${ticket.description || 'No description provided'}</p>
+                    
+                    <div class="flex items-center justify-between text-xs text-white/50 mb-4">
+                        <span>Created: ${formatDate(ticket.created_at)}</span>
+                        ${ticket.updated_at !== ticket.created_at ? `<span>Updated: ${formatDate(ticket.updated_at)}</span>` : ''}
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button 
+                            onclick="editTicket('${ticket.id}')" 
+                            class="flex-1 bg-white/10 hover:bg-[rgb(80,80,255)]/20 text-white text-sm font-medium py-2 px-3 rounded-lg transition-colors"
+                        >
+                            Edit
+                        </button>
+                        <button 
+                            onclick="deleteTicket('${ticket.id}')" 
+                            class="bg-red-500/20 hover:bg-red-500/30 text-red-300 text-sm font-medium py-2 px-3 rounded-lg transition-colors"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showCreateForm() {
+            editingTicketId = null;
+            document.getElementById('modalTitle').textContent = 'Create New Ticket';
+            document.getElementById('submitButtonText').textContent = 'Create Ticket';
+            document.getElementById('ticketForm').reset();
+            document.getElementById('ticketId').value = '';
+            document.getElementById('ticketModal').classList.remove('hidden');
+            hideError();
+        }
+
+        function editTicket(ticketId) {
+            const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+            const ticket = tickets.find(t => t.id === ticketId);
+            
+            if (!ticket) return;
+
+            editingTicketId = ticketId;
+            document.getElementById('modalTitle').textContent = 'Edit Ticket';
+            document.getElementById('submitButtonText').textContent = 'Update Ticket';
+            document.getElementById('ticketId').value = ticket.id;
+            document.getElementById('title').value = ticket.title;
+            document.getElementById('description').value = ticket.description || '';
+            document.getElementById('status').value = ticket.status;
+            document.getElementById('ticketModal').classList.remove('hidden');
+            hideError();
+        }
+
+        function hideTicketModal() {
+            document.getElementById('ticketModal').classList.add('hidden');
+            editingTicketId = null;
+            hideError();
+        }
+
+        function deleteTicket(ticketId) {
+            if (!confirm('Are you sure you want to delete this ticket?')) return;
+
+            const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+            const updatedTickets = tickets.filter(t => t.id !== ticketId);
+            
+            localStorage.setItem('tickets', JSON.stringify(updatedTickets));
+            loadTickets();
+        }
+
+        document.getElementById('ticketForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const status = document.getElementById('status').value;
+            
+            // Validation
+            if (!title) {
+                showError('Title is required.');
+                return;
+            }
+            
+            if (description.length > 200) {
+                showError('Description cannot exceed 200 characters.');
+                return;
+            }
+            
+            const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+            
+            if (editingTicketId) {
+                // Update existing ticket
+                const ticketIndex = tickets.findIndex(t => t.id === editingTicketId);
+                if (ticketIndex !== -1) {
+                    tickets[ticketIndex] = {
+                        ...tickets[ticketIndex],
+                        title,
+                        description,
+                        status,
+                        updated_at: new Date().toISOString()
+                    };
+                }
+            } else {
+                // Create new ticket
+                const newTicket = {
+                    id: 'ticket_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    title,
+                    description,
+                    status,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                };
+                
+                tickets.unshift(newTicket);
+            }
+            
+            localStorage.setItem('tickets', JSON.stringify(tickets));
+            hideTicketModal();
+            loadTickets();
+        });
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'open': return 'bg-yellow-500/20 text-yellow-300';
+                case 'in_progress': return 'bg-blue-500/20 text-blue-300';
+                case 'closed': return 'bg-green-500/20 text-green-300';
+                default: return 'bg-gray-500/20 text-gray-300';
+            }
+        }
+
+        function formatStatus(status) {
+            switch (status) {
+                case 'in_progress': return 'In Progress';
+                case 'open': return 'Open';
+                case 'closed': return 'Closed';
+                default: return status;
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function hideError() {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.classList.add('hidden');
+        }
+
+        function logout() {
+            localStorage.removeItem('ticketapp_session');
+            window.location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>
